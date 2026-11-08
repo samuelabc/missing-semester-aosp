@@ -1,0 +1,16 @@
+---
+layout: default
+---
+<article class="lecture">
+  <p class="lecture-meta">Lecture {{ page.number }} · {{ page.reading_time | default: "~20 min read, plus exercises" }} · Lab: {{ page.lab_time | default: "1–3 h" }} · Baseline: Android 17 / AAOS 26Q2</p>
+  <h1>{{ page.title }}</h1>
+  {% if page.subtitle %}<p class="subtitle">{{ page.subtitle }}</p>{% endif %}
+  {{ content }}
+  <nav class="lecture-nav" aria-label="Lecture navigation">
+    {% assign sorted = site.lectures | sort: "number" %}
+    {% assign prev_num = page.number | minus: 1 %}
+    {% assign next_num = page.number | plus: 1 %}
+    <span>{% for lec in sorted %}{% if lec.number == prev_num %}← <a href="{{ lec.url | relative_url }}">{{ lec.title }}</a>{% endif %}{% endfor %}</span>
+    <span>{% assign has_next = false %}{% for lec in sorted %}{% if lec.number == next_num %}{% assign has_next = true %}<a href="{{ lec.url | relative_url }}">{{ lec.title }}</a> →{% endif %}{% endfor %}{% unless has_next %} <a href="{{ '/capstone/' | relative_url }}">Capstone</a> →{% endunless %}</span>
+  </nav>
+</article>
