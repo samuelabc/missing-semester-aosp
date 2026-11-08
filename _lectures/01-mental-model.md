@@ -27,7 +27,7 @@ Three sentences that will carry you far. Android is not one program; it is hundr
 
 ## Walkthrough: anatomy of a synced tree
 
-Get the pinned tree ([Setup](/setup/) has the exact commands), then orient:
+Get the pinned tree ([Setup]({{ '/setup/' | relative_url }}) has the exact commands), then orient:
 
 ```bash
 repo init -u https://android.googlesource.com/platform/manifest -b android-latest-release
@@ -76,6 +76,6 @@ Reading a manifest is the other orientation skill. `.repo/manifests/default.xml`
 
 ## Go deeper: kernel and app pointers
 
-Kernel side: everything under `kernel/` is interface territory for now; the [kernel path](/kernel-path/) starts with how GKI changes what "customizing the kernel" even means. App side: notice `packages/apps/Car` exists but resist reading it as "apps"; these are system components, and Lecture 8 treats them that way. The [app path](/app-path/) orders the rest.
+Kernel side: everything under `kernel/` is interface territory for now; the [kernel path]({{ '/kernel-path/' | relative_url }}) starts with how GKI changes what "customizing the kernel" even means. App side: notice `packages/apps/Car` exists but resist reading it as "apps"; these are system components, and Lecture 8 treats them that way. The [app path]({{ '/app-path/' | relative_url }}) orders the rest.
 
 <div class="callout"><p><strong>Working with AI agents on this lecture's material:</strong> agents are good at the habit, bad at the map. Ask one to find every file referencing a property or service (that is search, verify with <code>grep</code>), but make it cite paths you then open. If it cannot show you the file, it did not find anything; it guessed in a confident font.</p></div>

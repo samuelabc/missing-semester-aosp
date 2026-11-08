@@ -69,6 +69,6 @@ For Cuttlefish specifically, the workflow is launch, then treat it like a device
 
 ## Go deeper: kernel and app pointers
 
-When `adb` cannot see the device at all, you are below Android: serial console and `dmesg` territory, [kernel path](/kernel-path/) step 5. When the question is "what is this app doing," `dumpsys package` and the [app path](/app-path/) step 6 testing tools take over.
+When `adb` cannot see the device at all, you are below Android: serial console and `dmesg` territory, [kernel path]({{ '/kernel-path/' | relative_url }}) step 5. When the question is "what is this app doing," `dumpsys package` and the [app path]({{ '/app-path/' | relative_url }}) step 6 testing tools take over.
 
 <div class="callout"><p><strong>Working with AI agents:</strong> paste exact command output, not your summary of it. Agents are strong at reading <code>dumpsys</code> dumps you supply and weak at knowing your device state; make them reason from the capture in front of them, and re-run any command they "remember" before trusting it.</p></div>

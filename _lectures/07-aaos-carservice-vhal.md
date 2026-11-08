@@ -60,6 +60,6 @@ Vendor properties, the OEM move: choose an ID in the vendor range with the right
 
 ## Go deeper: kernel and app pointers
 
-Below the VHAL, signals arrive via kernel drivers and vehicle networks; [kernel path](/kernel-path/) step 4 names the subsystems. Above CarService, cabin features consume the APIs you now understand; [app path](/app-path/) step 3 (Car API from the consumer side) plus building one tiny car app against the emulator will make your service design measurably better.
+Below the VHAL, signals arrive via kernel drivers and vehicle networks; [kernel path]({{ '/kernel-path/' | relative_url }}) step 4 names the subsystems. Above CarService, cabin features consume the APIs you now understand; [app path]({{ '/app-path/' | relative_url }}) step 3 (Car API from the consumer side) plus building one tiny car app against the emulator will make your service design measurably better.
 
 <div class="callout"><p><strong>Working with AI agents:</strong> ask an agent to trace a named property through <em>your</em> tree and produce the file chain for you to verify, link by link. Property IDs and vendor-range rules are exactly the sort of detail agents state confidently and wrongly; the headers in <code>hardware/interfaces</code> settle it in one <code>grep</code>.</p></div>

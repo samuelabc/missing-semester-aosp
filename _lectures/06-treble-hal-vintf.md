@@ -62,6 +62,6 @@ Adding a HAL follows the capstone's longer path: extend or define the interface 
 
 ## Go deeper: kernel and app pointers
 
-Below the HAL sits the driver it talks to (serial, CAN, virtualized VirtIO in SDV architectures); [kernel path](/kernel-path/) steps 3–4 are the reading order, and multi-VM AAOS (hypervisor, VirtIO) is the vendor architecture topic to ask your BSP team about armed with Lecture 6's contract questions. Apps must never see this layer directly; if a feature request implies they should, Lecture 7's CarProperty path is the answer.
+Below the HAL sits the driver it talks to (serial, CAN, virtualized VirtIO in SDV architectures); [kernel path]({{ '/kernel-path/' | relative_url }}) steps 3–4 are the reading order, and multi-VM AAOS (hypervisor, VirtIO) is the vendor architecture topic to ask your BSP team about armed with Lecture 6's contract questions. Apps must never see this layer directly; if a feature request implies they should, Lecture 7's CarProperty path is the answer.
 
 <div class="callout"><p><strong>Working with AI agents:</strong> have the agent build the contract sheet (files, versions, instance names) with citations, then verify each path by opening it. Interface/version questions are where agents blend HIDL and AIDL eras most fluently; the manifest on disk is the referee.</p></div>

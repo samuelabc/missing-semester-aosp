@@ -61,6 +61,6 @@ Cars add one twist phones forgive: update timing is a vehicle decision. Garage m
 
 ## Go deeper: kernel and app pointers
 
-Bootloader and kernel participate in slot selection and verified boot chains; the vendor's bootloader documentation plus [kernel path](/kernel-path/) step 1 frame what questions to ask. Updatable modules and app-layer updates (APEX, app updates outside OTA) are the complement; the [app path](/app-path/) explains why cabin apps increasingly ship without waiting for your system OTA, and what that split means for feature planning.
+Bootloader and kernel participate in slot selection and verified boot chains; the vendor's bootloader documentation plus [kernel path]({{ '/kernel-path/' | relative_url }}) step 1 frame what questions to ask. Updatable modules and app-layer updates (APEX, app updates outside OTA) are the complement; the [app path]({{ '/app-path/' | relative_url }}) explains why cabin apps increasingly ship without waiting for your system OTA, and what that split means for feature planning.
 
 <div class="callout"><p><strong>Working with AI agents:</strong> let agents draft release checklists, payload inspections, and rollback test plans, where completeness is the value. Never let an agent's confidence substitute for the rehearsed rollback: the only trustworthy sentence in this lecture is "we watched it roll back." </p></div>

@@ -69,6 +69,6 @@ Wire it from the product (install the binary, copy or generate the `.rc` via `PR
 
 ## Go deeper: kernel and app pointers
 
-If the relay fails before `init`, you are in kernel/DT territory: [kernel path](/kernel-path/) steps 1, 3, and 5. If boot completes but the cabin experience is wrong, you have left this lecture: launcher and SystemUI behaviour live in Lecture 8 and the [app path](/app-path/) step 4.
+If the relay fails before `init`, you are in kernel/DT territory: [kernel path]({{ '/kernel-path/' | relative_url }}) steps 1, 3, and 5. If boot completes but the cabin experience is wrong, you have left this lecture: launcher and SystemUI behaviour live in Lecture 8 and the [app path]({{ '/app-path/' | relative_url }}) step 4.
 
 <div class="callout"><p><strong>Working with AI agents:</strong> give the agent a <em>stage-bounded</em> log slice, not 200k lines. "Boot stalls after this timestamp; what stage is this and what sets the next property?" gets reasoning. Dumping the whole log gets a summary of the log.</p></div>

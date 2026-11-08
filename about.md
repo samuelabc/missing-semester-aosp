@@ -27,6 +27,6 @@ The length. Twelve lectures, not a semester. Working engineers do not have a sem
 
 ## What this course is not
 
-Not app development: the app layer appears only where it touches the system, with a [pointer path](/app-path/) for the rest. Not kernel development: same treatment, [kernel path](/kernel-path/). Not certification prep, though Lecture 12 covers what CTS, VTS, and the CDD actually demand of the changes you make in the other eleven.
+Not app development: the app layer appears only where it touches the system, with a [pointer path]({{ '/app-path/' | relative_url }}) for the rest. Not kernel development: same treatment, [kernel path]({{ '/kernel-path/' | relative_url }}). Not certification prep, though Lecture 12 covers what CTS, VTS, and the CDD actually demand of the changes you make in the other eleven.
 
 If you finish the twelve lectures and the capstone, you will not be an expert. You will be something more useful on a program: an engineer who knows where things live, why they are built that way, and how to change them without guessing.

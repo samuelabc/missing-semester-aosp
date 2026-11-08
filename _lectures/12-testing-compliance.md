@@ -55,10 +55,10 @@ Close the loop with process: presubmit/CI that runs module builds, your tests, p
 
 ## Go deeper: kernel and app pointers
 
-Kernel compliance (GKI/KMI tests, VTS kernel areas) extends this lecture downward; [kernel path](/kernel-path/) step 6 marks the entry. App compatibility (CTS proper, app testing practices) extends it upward through the [app path](/app-path/) step 6. Both are the same lesson at different layers: a promise, a suite, and your delta under examination.
+Kernel compliance (GKI/KMI tests, VTS kernel areas) extends this lecture downward; [kernel path]({{ '/kernel-path/' | relative_url }}) step 6 marks the entry. App compatibility (CTS proper, app testing practices) extends it upward through the [app path]({{ '/app-path/' | relative_url }}) step 6. Both are the same lesson at different layers: a promise, a suite, and your delta under examination.
 
 <div class="callout"><p><strong>Working with AI agents:</strong> agents write test skeletons and read TradeFed failure XML willingly. The discipline is yours: demand the negative case (permission denied, property absent, wrong area ID), because agent-written happy-path tests pass right up to the moment the car does not.</p></div>
 
 ---
 
-**Next:** the [Capstone](/capstone/) puts all twelve lectures into one change: a vendor vehicle property, from VHAL to test, with your name on every layer.
+**Next:** the [Capstone]({{ '/capstone/' | relative_url }}) puts all twelve lectures into one change: a vendor vehicle property, from VHAL to test, with your name on every layer.

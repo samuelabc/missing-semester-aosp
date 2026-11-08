@@ -42,7 +42,7 @@ Reading errors is a skill with a method: Soong errors name the `Android.bp` and 
 
 Kill the full-build habit. Full `m` is for releases and for proving a clean tree. Daily work is `m <module>`, push or sync the artifact, restart the affected service (`adb root && adb remount`, or `adb sync` where supported), and reserve full builds for changes that cross module boundaries.
 
-<div class="callout"><p><strong>Cloud builds:</strong> if your machine is short on RAM, a cloud VM (32–64 GB RAM, 300 GB disk, fast cores beats fancy cores) is the standard answer. Lecture sizing is in <a href="/setup/">Setup</a>. First sync and first build are slow everywhere; budget them once, not per lab.</p></div>
+<div class="callout"><p><strong>Cloud builds:</strong> if your machine is short on RAM, a cloud VM (32–64 GB RAM, 300 GB disk, fast cores beats fancy cores) is the standard answer. Lecture sizing is in <a href="{{ '/setup/' | relative_url }}">Setup</a>. First sync and first build are slow everywhere; budget them once, not per lab.</p></div>
 
 ## Lab (tiered)
 
@@ -72,6 +72,6 @@ Kill the full-build habit. Full `m` is for releases and for proving a clean tree
 
 ## Go deeper: kernel and app pointers
 
-Kernel builds (Kleaf) follow the same philosophy with different files; see step 2 of the [kernel path](/kernel-path/). On the app side, an `android_app` module plus privileged-permission allowlists is how system apps ship; the [app path](/app-path/) step 2 covers the permission half, and Lecture 8 the overlay half.
+Kernel builds (Kleaf) follow the same philosophy with different files; see step 2 of the [kernel path]({{ '/kernel-path/' | relative_url }}). On the app side, an `android_app` module plus privileged-permission allowlists is how system apps ship; the [app path]({{ '/app-path/' | relative_url }}) step 2 covers the permission half, and Lecture 8 the overlay half.
 
 <div class="callout"><p><strong>Working with AI agents:</strong> build errors are good agent food: paste the <em>first</em> Soong/Ninja failure and ask for the module graph explanation, then verify the named files exist. Agents hallucinate module types and makefile variables with total confidence, so treat every suggested variable as guilty until <code>grep</code> proves it real.</p></div>

@@ -64,6 +64,6 @@ Memory and leaks, briefly because IVI uptime is measured in weeks: `dumpsys memi
 
 ## Go deeper: kernel and app pointers
 
-Kernel-side stalls appear in the same Perfetto timeline (kernel tracing, `ftrace`); the [kernel path](/kernel-path/) step 5 is the companion. For app-visible freezes, ANR analysis pairs this lecture with the [app path](/app-path/) step 6 instrumentation habits.
+Kernel-side stalls appear in the same Perfetto timeline (kernel tracing, `ftrace`); the [kernel path]({{ '/kernel-path/' | relative_url }}) step 5 is the companion. For app-visible freezes, ANR analysis pairs this lecture with the [app path]({{ '/app-path/' | relative_url }}) step 6 instrumentation habits.
 
 <div class="callout"><p><strong>Working with AI agents:</strong> this is their best lecture. Paste a bounded log slice, a tombstone backtrace (symbolized), or a <code>dumpsys</code> section and ask for stage, suspects ranked by evidence, and the next capture, not for "the fix." Then run the capture. Agents that skip evidence produce fixes you cannot review.</p></div>

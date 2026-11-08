@@ -63,6 +63,6 @@ Audit habit for reviews: `neverallow` violations fail the build; an over-broad a
 
 ## Go deeper: kernel and app pointers
 
-SELinux is a kernel mechanism with Android's policy on top; [kernel path](/kernel-path/) step 1 explains where policy meets the kernel you ship. On the app side, permission protection levels and the app sandbox are the counterpart contract; [app path](/app-path/) steps 1–2, then Lecture 12's CTS view of both.
+SELinux is a kernel mechanism with Android's policy on top; [kernel path]({{ '/kernel-path/' | relative_url }}) step 1 explains where policy meets the kernel you ship. On the app side, permission protection levels and the app sandbox are the counterpart contract; [app path]({{ '/app-path/' | relative_url }}) steps 1–2, then Lecture 12's CTS view of both.
 
 <div class="callout"><p><strong>Working with AI agents:</strong> agents will write you an <code>allow</code> for any denial you paste. That is precisely the danger. Use them to <em>explain</em> a denial and to find existing related policy, then write the narrow rule yourself and make the agent argue against it. Policy you cannot defend line by line is not yours yet.</p></div>

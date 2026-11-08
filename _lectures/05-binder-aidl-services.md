@@ -66,6 +66,6 @@ Stability is the boundary rule. Framework-internal AIDL can evolve with the tree
 
 ## Go deeper: kernel and app pointers
 
-Binder lives in the kernel (`/dev/binder`, `binderfs`); when you need that side, [kernel path](/kernel-path/) step 1's architecture docs are the entry. For app-facing APIs, the `Car` facade pattern you traced is the model; the [app path](/app-path/) step 3 shows the consumer's view of the same contract.
+Binder lives in the kernel (`/dev/binder`, `binderfs`); when you need that side, [kernel path]({{ '/kernel-path/' | relative_url }}) step 1's architecture docs are the entry. For app-facing APIs, the `Car` facade pattern you traced is the model; the [app path]({{ '/app-path/' | relative_url }}) step 3 shows the consumer's view of the same contract.
 
 <div class="callout"><p><strong>Working with AI agents:</strong> agents draft AIDL and boilerplate well. Make them also draft the <em>caller check</em> and the <code>dump()</code>, and never accept a generated service registration without finding its Lecture 9 policy twin. A service that exists but is denied by SELinux is the classic agent-shaped bug.</p></div>

@@ -63,6 +63,6 @@ Privileged system components complete the picture. A system app that needs platf
 
 ## Go deeper: kernel and app pointers
 
-Overlays reach into app resources, so the resource system itself is app-layer knowledge worth one evening: the [app resources documentation](https://developer.android.com/guide/topics/resources/providing-resources) from the platform side. Nothing in this lecture needs the kernel; if a "customization" proposes a driver change to alter UI behaviour, that smell is the [kernel path](/kernel-path/)'s rule of thumb in reverse.
+Overlays reach into app resources, so the resource system itself is app-layer knowledge worth one evening: the [app resources documentation](https://developer.android.com/guide/topics/resources/providing-resources) from the platform side. Nothing in this lecture needs the kernel; if a "customization" proposes a driver change to alter UI behaviour, that smell is the [kernel path]({{ '/kernel-path/' | relative_url }})'s rule of thumb in reverse.
 
 <div class="callout"><p><strong>Working with AI agents:</strong> agents love generating overlay XML. Constrain them to your tree: "find the base resource for X and produce the overlay with the identical name" is verifiable in one <code>grep</code>. Generated resource names that do not exist in the base package fail silently, which is the worst kind of fail.</p></div>

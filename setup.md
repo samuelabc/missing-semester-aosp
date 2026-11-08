@@ -24,7 +24,7 @@ repo init -u https://android.googlesource.com/platform/manifest \
 repo sync -c -j8
 ```
 
-Pin the manifest to the tag for reproducibility once your tree is synced (`repo manifest -r`). When the course pin moves, the changelog on the [resources page](/resources/) will list lecture-by-lecture changes rather than silently rewriting them.
+Pin the manifest to the tag for reproducibility once your tree is synced (`repo manifest -r`). When the course pin moves, the changelog on the [resources page]({{ '/resources/' | relative_url }}) will list lecture-by-lecture changes rather than silently rewriting them.
 
 ## Machines, by tier
 

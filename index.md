@@ -15,7 +15,7 @@ Inspired by MIT's [The Missing Semester of Your CS Education](https://missing.cs
 
 ## Syllabus
 
-Lectures follow the order you actually meet these problems on a vehicle program: get the source, build a product, boot it, extend it, secure it, debug it, ship it, prove it. Each lecture is self-contained, takes an evening to read, and ends with a lab you can run without car hardware. New here? Start with [Setup &amp; prerequisites](/setup/) and Lecture 1.
+Lectures follow the order you actually meet these problems on a vehicle program: get the source, build a product, boot it, extend it, secure it, debug it, ship it, prove it. Each lecture is self-contained, takes an evening to read, and ends with a lab you can run without car hardware. New here? Start with [Setup &amp; prerequisites]({{ '/setup/' | relative_url }}) and Lecture 1.
 
 <ol class="syllabus">
 {% assign sorted = site.lectures | sort: "number" %}{% for lec in sorted %}
@@ -24,11 +24,11 @@ Lectures follow the order you actually meet these problems on a vehicle program:
   <li><span class="no">★</span><a href="{{ '/capstone/' | relative_url }}">Capstone: a vendor vehicle property, end to end</a><span class="lab">project</span></li>
 </ol>
 
-Plus two pointer tracks for the subjects this course deliberately does not teach as lectures: the [Kernel path](/kernel-path/) (drivers, device tree, kernel customization, in the order a system engineer meets them) and the [App path](/app-path/) (system apps, car apps, and customization at the app layer).
+Plus two pointer tracks for the subjects this course deliberately does not teach as lectures: the [Kernel path]({{ '/kernel-path/' | relative_url }}) (drivers, device tree, kernel customization, in the order a system engineer meets them) and the [App path]({{ '/app-path/' | relative_url }}) (system apps, car apps, and customization at the app layer).
 
 ## Who this is for
 
-Working OEM and Tier-1 software engineers, roughly one to five years in, comfortable with Linux, Git, and reading C++ or Java, who are new or intermediate in AOSP/AAOS. App developers will find Lecture 8 and the [App path](/app-path/) useful but should not expect UI development here. Kernel engineers should start from the [Kernel path](/kernel-path/).
+Working OEM and Tier-1 software engineers, roughly one to five years in, comfortable with Linux, Git, and reading C++ or Java, who are new or intermediate in AOSP/AAOS. App developers will find Lecture 8 and the [App path]({{ '/app-path/' | relative_url }}) useful but should not expect UI development here. Kernel engineers should start from the [Kernel path]({{ '/kernel-path/' | relative_url }}).
 
 ## How to use this course
 
@@ -38,7 +38,7 @@ Every lecture also folds in how working engineers now use AI coding agents on th
 
 ## General information
 
-**Staff:** written and maintained by practitioners; see [Resources &amp; contributing](/resources/).
-**Hardware:** none required. A Linux workstation or cloud VM helps from Lecture 2 on; see [Setup](/setup/).
+**Staff:** written and maintained by practitioners; see [Resources &amp; contributing]({{ '/resources/' | relative_url }}).
+**Hardware:** none required. A Linux workstation or cloud VM helps from Lecture 2 on; see [Setup]({{ '/setup/' | relative_url }}).
 **Licence:** CC BY-NC-SA 4.0, same family as the MIT course that inspired this one.
 **Version note:** AOSP now publishes source in Q2/Q4 under its trunk-stable model; this course pins one release rather than chasing `aosp-main`, and will say what changed when the pin moves.

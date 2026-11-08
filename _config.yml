@@ -1,7 +1,7 @@
 title: "The Missing Semester of AOSP & AAOS"
 description: "The system-level curriculum OEM engineers customizing Android Automotive are assumed to know, but nobody teaches: build, boot, Binder, HALs, vehicle data, SELinux, debugging, OTA, and compliance."
-url: ""
-baseurl: ""
+url: "https://samuelabc.github.io"
+baseurl: "/missing-semester-aosp"
 lang: en
 markdown: kramdown
 kramdown:
