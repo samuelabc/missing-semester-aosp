@@ -52,7 +52,7 @@ Names a hidden curriculum; sells lifetime ROI over credits; short/intensive/boun
 
 ## Status
 
-v1.0 built and verified (2026-11-08): Jekyll build clean, all 16 published bash blocks pass `bash -n`, internal-link crawl (20 URLs) clean, browser e2e on desktop/mobile home, Lecture 7 (incl. solution toggle), capstone, and 404 journeys captured in `screenshots/`. Not yet deployed: pushing to a GitHub repo with Pages enabled (workflow in `.github/workflows/pages.yml`) is the remaining owner step. Terms in `GLOSSARY.md`; decisions in `docs/adr/`.
+v1.0 built and verified (2026-11-08): Jekyll build clean, all 16 published bash blocks pass `bash -n`, internal-link crawl (20 URLs) clean, browser e2e on desktop/mobile home, Lecture 7 (incl. solution toggle), capstone, and 404 journeys captured in `screenshots/`. Deployed: public repo https://github.com/samuelabc/missing-semester-aosp (initially created private; GitHub free plan cannot serve Pages from private repos, owner chose public), live at https://samuelabc.github.io/missing-semester-aosp/ via `.github/workflows/pages.yml`; live crawl of 20 URLs passes. Note `url`/`baseurl` in `_config.yml` are set for that subpath and internal links must go through `relative_url`. Terms in `GLOSSARY.md`; decisions in `docs/adr/`.
 
 ## Implementation notes
 

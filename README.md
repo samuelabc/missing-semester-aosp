@@ -19,4 +19,4 @@ bundle exec jekyll build   # static output in _site/
 - `GLOSSARY.md`, `ARCHITECTURE.md`, `docs/adr/` — domain language, architecture record, decisions
 - `screenshots/` — e2e verification captures
 
-Deploy: GitHub Pages via `.github/workflows/pages.yml` on push to `main`.
+Deploy: GitHub Pages via `.github/workflows/pages.yml` on push to `main`. Live at https://samuelabc.github.io/missing-semester-aosp/ (repo: https://github.com/samuelabc/missing-semester-aosp). Internal links must use `relative_url` because the site serves from that subpath.
