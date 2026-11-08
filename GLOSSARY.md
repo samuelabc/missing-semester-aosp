@@ -39,3 +39,19 @@ _Avoid_: Hands-on (unqualified)
 **Vendor Vehicle Property**:
 A vehicle property defined by the OEM or vendor outside the standard property set, used to carry a vehicle-specific signal between the vehicle layer and Android.
 _Avoid_: Custom signal, car property (unqualified)
+
+**Worked Example**:
+A complete, copyable set of artifacts taken from empty file to verified running result, with expected output and at least one deliberate failure and its fix. A fragment that stops before it runs is not a Worked Example.
+_Avoid_: Snippet, sample (unqualified)
+
+**Guided Lab**:
+A lab written as numbered steps with a checkpoint after each step, so a learner can tell at every stage whether they are on track. An assignment that only names a deliverable ("produce a sheet") is not a Guided Lab.
+_Avoid_: Hands-on (unqualified), exercise (for this concept)
+
+**Running Example**:
+The single fictional product that every lecture adds one real piece to, so the pieces accumulate into the Capstone instead of being discarded at the end of each lecture.
+_Avoid_: Toy example, demo (unqualified)
+
+**Configuration Artifact**:
+A file whose contents configure a running system — policy, contexts, board makefiles and their kin. It is taught by its path, the process that reads it, the meaning of its lines, and the failure that appears when it is missing or wrong.
+_Avoid_: Config (unqualified)

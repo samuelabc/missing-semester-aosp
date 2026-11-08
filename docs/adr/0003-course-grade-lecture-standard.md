@@ -1,0 +1,9 @@
+# Course-grade lecture standard: worked examples, guided labs, one running example
+
+Status: accepted (2026-11-08)
+
+v1 shipped twelve lectures of roughly 1,000 words each: accurate overviews that explained why things matter but rarely showed a complete file a learner could copy, build, and watch fail. An audit (same day) counted 1–2 code blocks and zero expected outputs per lecture, against an architecture note promising 45–60 minutes of depth. Readers could talk about SELinux; they could not write its policy. That is a blog, not a course.
+
+From this decision, a lecture is only done when it contains at least one Worked Example (every file in full, line by line, exact path, build and run commands, expected output, and deliberate break-it/fix-it cases) and its lab is a Guided Lab with a checkpoint per step (see `GLOSSARY.md`). Lectures build on one Running Example — the fictional `device/acme/kestrel` product and its `welcomed` daemon — so artifacts accumulate into the Capstone. Verification stays source-true per `docs/adr/0002`: real paths checked against the pinned tag, invented files syntax- and consistency-checked, no full-build requirement. This supersedes the depth portion of the original lecture template in `ARCHITECTURE.md` (the section order survives); timings are restated honestly at roughly 35–45 minutes of reading plus a 2–3 hour lab.
+
+The trade-off is page length and authoring cost: a conforming lecture runs 6,000–7,500 words and takes days, not hours, to write and verify. The rejected alternatives were a light polish (add the missing snippets to the existing essays — leaves the structure that caused the problem) and an encyclopedic single pass over all twelve lectures at once (no review checkpoint; the owner reviews one pilot first). Lecture 9 (SELinux) is the pilot; the standard rolls to the other lectures only after the owner approves it.
