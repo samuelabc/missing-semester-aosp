@@ -13,6 +13,8 @@ You will spend thousands of hours inside this stack over a career. The first mon
 
 Inspired by MIT's [The Missing Semester of Your CS Education](https://missing.csail.mit.edu/), whose premise we borrow with respect: the most valuable curriculum is often the one nobody put on the syllabus.
 
+<div class="lecture-map"><span class="block-label">Start here</span><h2>The course on one screen</h2><div class="lecture-map-grid"><div><h3>Orient</h3><ul><li><a href="{{ '/setup/' | relative_url }}">Setup &amp; prerequisites</a> — machines, by tier</li><li><a href="{{ '/lectures/01-mental-model/' | relative_url }}">Lecture 1</a> — the map and the habit</li></ul></div><div><h3>The arc</h3><ul><li>Lectures 2–4 — build a product, boot it</li><li>Lectures 5–8 — services, HALs, vehicle data, customization</li><li>Lectures 9–12 — secure, debug, ship, prove</li></ul></div><div><h3>Finish</h3><ul><li><a href="{{ '/capstone/' | relative_url }}">Capstone</a> — assemble the welcome-light stack</li><li><a href="{{ '/kernel-path/' | relative_url }}">Kernel path</a> · <a href="{{ '/app-path/' | relative_url }}">App path</a> — the pointer tracks</li></ul></div><p class="map-note">Each lecture opens with what it teaches and closes each section with what you can now do. Lost mid-lecture? The Contents rail always shows where you are.</p></div></div>
+
 ## Syllabus
 
 Lectures follow the order you actually meet these problems on a vehicle program: get the source, build a product, boot it, extend it, secure it, debug it, ship it, prove it. Each lecture is self-contained, takes an evening to read, and ends with a lab you can run without car hardware. New here? Start with [Setup &amp; prerequisites]({{ '/setup/' | relative_url }}) and Lecture 1.

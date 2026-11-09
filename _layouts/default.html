@@ -3,13 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
-<meta name="description" content="{{ page.description | default: site.description | escape }}">
+<meta name="description" content="{{ page.description | default: page.subtitle | default: site.description | escape }}">
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%231b6e4b'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='monospace'>$_</text></svg>">
 {% feed_meta %}
 </head>
 <body>
+<a class="skip-link" href="#content">Skip to content</a>
 <header class="site-header">
   <div class="wrap header-inner">
     <a class="site-title" href="{{ '/' | relative_url }}">missing-semester<span class="accent">-aosp</span></a>
@@ -23,7 +25,7 @@
     </nav>
   </div>
 </header>
-<main class="wrap" id="content">
+<main class="wrap{% if page.layout == 'lecture' %} wrap--lecture{% endif %}" id="content">
 {{ content }}
 </main>
 <footer class="site-footer">

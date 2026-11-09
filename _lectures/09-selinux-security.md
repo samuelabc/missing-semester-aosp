@@ -2,11 +2,14 @@
 number: 9
 title: "SELinux in depth"
 subtitle: "Every policy file, worked end to end: give a new vendor daemon its own domain, labels, and Binder service — then fix the three denials it earns, narrowly."
-reading_time: "~40 min read, plus lab"
+reading_time: "~50 min read, plus lab"
 lab_time: "2–3 h"
 ---
 
+<div class="lecture-map"><span class="block-label">Lecture map</span><h2>The whole lecture on one screen</h2><div class="lecture-map-grid"><div><h3>Build the map</h3><ul><li><a href="#motivation">Motivation</a> — death by denial, found early</li><li><a href="#mental-model">Mental model</a> — domains, types, rules</li><li><a href="#the-running-example">The running example</a> — the cast, fenced</li><li><a href="#file-anatomy-the-whole-directory-at-a-glance">File anatomy: the whole directory at a glance</a> — never one file</li></ul></div><div><h3>Walk the work</h3><ul><li><a href="#worked-example-securing-welcomed-one-denial-at-a-time">Worked example: securing welcomed, one denial at a time</a> — one denial at a time</li><li><a href="#micro-examples-the-rest-of-the-directory">Micro-examples: the rest of the directory</a> — the rest of the directory</li><li><a href="#the-build-and-test-loop">The build and test loop</a> — make the loop boring</li><li><a href="#annex-the-stand-in-daemon">Annex: the stand-in daemon</a> — the daemon that earns denials</li></ul></div><div><h3>Make it a habit</h3><ul><li><a href="#lab-guided">Lab (guided)</a> — empty directory to enforcing</li><li><a href="#exercises">Exercises</a> — judge the rule</li><li><a href="#go-deeper-kernel-and-app-pointers">Go deeper: kernel and app pointers</a> — enforced below, configured above</li></ul></div><p class="map-note">Lost mid-lecture? The Contents rail on the left (top on a phone) always shows where you are. Each section opens with what it teaches and closes with what you can now do.</p></div></div>
+
 ## Motivation
+<div class="section-opener"><span class="block-label">In this section</span><p>Most OEM changes do not die in code review; they die here, late and quietly, on a <code>user</code> build where enforcing is not optional. This lecture is the denial-driven method that finds those deaths on your bench instead.</p></div>
 
 Most OEM changes do not die in code review. They die here, late and quietly. The service works on a `userdebug` bench where someone ran `setenforce 0` "just for today". Then the `user` build arrives, or a policy review, or VTS, and the feature turns out to have been borrowing permissions from whatever label it happened to land on. The fix at that point is never small, because nobody can say which accesses the feature actually needs.
 
@@ -14,7 +17,10 @@ This lecture is the antidote, and it is deliberately narrow. It teaches SELinux 
 
 By the end you will have written, line by line, the complete policy for a real-shaped vendor daemon: its `.te` file, its entries in `file_contexts`, `service_contexts`, and `property_contexts`, a `genfs_contexts` line, the board-level wiring that gets those files into the build, and the smaller files (`seapp_contexts`, `mac_permissions.xml`, `keystore2_key_contexts`, `hwservice_contexts`) that secure the app and HAL sitting next to it. Nothing here is a fragment. Every file is shown whole enough to copy into a tree.
 
+<div class="section-recap"><span class="block-label">Now you can</span><p>Say why policy work belongs early, and what <code>setenforce 0</code> “just for today” hides from a <code>user</code> build.</p></div>
+
 ## Mental model
+<div class="section-opener"><span class="block-label">In this section</span><p>SELinux is mandatory access control in two vocabularies: processes run in domains, everything else carries types, and a rule is the only sentence that lets one touch the other. No rule, no access — that is the whole machine.</p></div>
 
 SELinux is mandatory access control stated in two vocabularies. Processes run in **domains**. Files, devices, properties, and Binder services carry **types**. A rule
 
@@ -34,7 +40,10 @@ Third, **neverallow rules are the floor**. They are compiled into the same polic
 
 Fourth, **`audit2allow` is a translator, not an author**. Feed it a denial and it prints the allow that would silence that denial. It has no idea whether the object should have had a different label in the first place, so its output is routinely over-broad. The official guidance says this plainly: do not just copy the output. In this lecture `audit2allow` appears three times, and three times its answer is wrong in an instructive way.
 
+<div class="section-recap"><span class="block-label">Now you can</span><p>State any access as a domain, a type, and a rule — and predict the denial when the rule is absent.</p></div>
+
 ## The running example
+<div class="section-opener"><span class="block-label">In this section</span><p>Fix the cast in your head: <code>welcomed</code>, its service name, its files, its callers — the exact names Lectures 2, 4, and 5 minted, now to be fenced in by policy.</p></div>
 
 Every lecture in this course now adds one piece to the same fictional car. Fix the cast in your head, because Lectures 2, 4, and 5 will use these exact names when they are rewritten, and the capstone already builds this feature:
 
@@ -50,11 +59,18 @@ Every lecture in this course now adds one piece to the same fictional car. Fix t
 | Its properties | `vendor.acme.welcome.*` |
 | Its companion app | `com.acme.welcome`, a privileged system app |
 
-Why a native daemon, and not the Java service from Lecture 5? Because a Java system service runs inside `system_server` and shares that process's domain. It can be *labelled as a service* (that is `service_contexts`, Stage 2 below), but it can never demonstrate the central SELinux skill, which is creating a new domain and transitioning into it. A standalone vendor daemon can, and it is also the honest shape for code that touches vehicle hardware: the system-side welcome-light service from the capstone will call `welcomed` across the Treble boundary, exactly the way CarService calls the Vehicle HAL. The daemon offers its Binder interface in HAL style for the same reason. A vendor daemon that registers a plain system service would be teaching you a boundary violation; Lecture 6 explained why, and this lecture refuses to commit it.
+Why a native daemon, and not the Java service from Lecture 5? Because a Java system service runs inside `system_server` and shares that process's domain. It can be *labelled as a service* (that is `service_contexts`, Stage 2 below), but it can never demonstrate the central SELinux skill, which is creating a new domain and transitioning into it.
 
-One stand-in, clearly labelled. Lectures 4 and 5 have not been rewritten yet, so `welcomed` does not exist in your tree. The annex at the end of the worked example gives you a minimal version — about thirty lines that register the service, write a state file, open the light, set a property, and loop. It exists so the denials in this lecture can really happen. When Lectures 4 and 5 are rolled out, they replace the stand-in with the same binary built and started properly; the policy you write today does not change.
+A standalone vendor daemon can, and it is also the honest shape for code that touches vehicle hardware: the system-side welcome-light service from the capstone will call `welcomed` across the Treble boundary, exactly the way CarService calls the Vehicle HAL. The daemon offers its Binder interface in HAL style for the same reason. A vendor daemon that registers a plain system service would be teaching you a boundary violation; Lecture 6 explained why, and this lecture refuses to commit it.
+
+One stand-in, clearly labelled. Lectures 4 and 5 have not been rewritten yet, so `welcomed` does not exist in your tree. The annex at the end of the worked example gives you a minimal version — about thirty lines that register the service, write a state file, open the light, set a property, and loop. It exists so the denials in this lecture can really happen.
+
+When Lectures 4 and 5 are rolled out, they replace the stand-in with the same binary built and started properly; the policy you write today does not change.
+
+<div class="section-recap"><span class="block-label">Now you can</span><p>Name the running example's cast and the surfaces policy must fence: files, device, property, service.</p></div>
 
 ## File anatomy: the whole directory at a glance
+<div class="section-opener"><span class="block-label">In this section</span><p>A vendor policy change is never one file: it is the small <code>sepolicy/vendor/</code> directory plus one line in <code>BoardConfig.mk</code>, concatenated with the platform's policy at build time.</p></div>
 
 A vendor policy change is never one file. It is a small directory, `device/acme/kestrel/sepolicy/vendor/`, plus one line in `BoardConfig.mk`. The build concatenates your files with the platform's, per partition, and compiles them into the binary `sepolicy` and the per-partition context files (`vendor_file_contexts`, `vendor_service_contexts`, and so on — the module list is in `system/sepolicy/contexts/Android.bp`, verified at the pinned tag). This table is the map for the lecture. Every row gets written or read in full below.
 
@@ -74,9 +90,16 @@ A vendor policy change is never one file. It is a small directory, `device/acme/
 | `hwservice_contexts` | `vendor_hwservice_contexts`; read by `hwservicemanager` | You ship a legacy HIDL HAL (rare in new work) | The HIDL service cannot be added or found; AIDL services do not belong here at all |
 | `BoardConfig.mk` (in `device/acme/kestrel/`) | Read by the build before any of the above | Once per device: it points the build at your directory | None of your files are in the build, and the tree looks exactly like success until runtime |
 
-Three reading notes before we write anything. First, platform policy splits into `system/sepolicy/public` (the API vendor policy may use), `private` (platform internals), and `vendor` (policy for platform components that happen to live on the vendor partition). You write against `public`. Second, the old variable name `BOARD_SEPOLICY_DIRS` still appears in trees — Cuttlefish uses it once, for a Bluetooth library directory — but new vendor policy is wired with `BOARD_VENDOR_SEPOLICY_DIRS`; that is what `system/sepolicy/README.md` documents at the pinned tag, and it is what we use. Third, the modern device layout is flat: `.te` files and contexts files side by side in one directory. Cuttlefish's `shared/sepolicy/vendor/` at the pinned tag is the reference — ninety-odd files, no ceremony.
+Three reading notes before we write anything. First, platform policy splits into `system/sepolicy/public` (the API vendor policy may use), `private` (platform internals), and `vendor` (policy for platform components that happen to live on the vendor partition). You write against `public`. Second, the old variable name `BOARD_SEPOLICY_DIRS` still appears in trees — Cuttlefish uses it once, for a Bluetooth library directory — but new vendor policy is wired with `BOARD_VENDOR_SEPOLICY_DIRS`; that is what `system/sepolicy/README.md` documents at the pinned tag, and it is what we use.
+
+Third, the modern device layout is flat: `.te` files and contexts files side by side in one directory. Cuttlefish's `shared/sepolicy/vendor/` at the pinned tag is the reference — ninety-odd files, no ceremony.
+
+<div class="section-recap"><span class="block-label">Now you can</span><p>Name every file in the policy directory, what it labels or allows, and the board line that enrols it.</p></div>
+
+<figure class="anchor-figure" role="img" aria-label="Concept anchor: the policy directory, at a glance"><p class="anchor-title">Concept anchor — the policy directory, at a glance</p><div class="anchor-cols"><div class="anchor-col"><strong>Rules — <code>.te</code></strong>what each domain may do: the allows a denial review will judge</div><div class="anchor-col"><strong>Contexts</strong><code>file_contexts</code>, <code>service_contexts</code> and kin: what everything is labelled</div><div class="anchor-col"><strong>Board line</strong><code>BOARD_VENDOR_SEPOLICY_DIRS</code> in <code>BoardConfig.mk</code>: enrols the whole directory</div></div><figcaption><strong>Read it as:</strong> never one file. Rules without labels judge nothing, labels without the board line never reach the build — the worked example writes all three kinds.</figcaption></figure>
 
 ## Worked example: securing welcomed, one denial at a time
+<div class="section-opener"><span class="block-label">In this section</span><p>Secure <code>welcomed</code> the way it is done at work: start with almost nothing, run enforcing, read what the kernel says, fix that one thing. Three stages, every file in full, every denial answered.</p></div>
 
 We build the policy the way it is built at work: start with almost nothing, run enforcing, read what the kernel says, fix that one thing. Three stages. Each stage shows the file state, the failure, the tempting wrong fix, and the narrow one. Sample denials below are representative lines in the kernel's audit format; your device name, inode, and pid will differ. What will not differ is the grammar, and the grammar is the skill.
 
@@ -142,7 +165,9 @@ avc: denied { execute } for pid=388 comm="init" path="/vendor/bin/welcomed"
   tcontext=u:object_r:vendor_file:s0 tclass=file permissive=0
 ```
 
-Read it left to right, because every denial you will ever meet has this shape. `scontext` is who acted: `init`, as itself. `tcontext` is what it acted on: the binary, labelled `vendor_file` — the default label for files on the vendor partition, because nothing has claimed this path yet. `tclass=file` with `{ execute }` is the act. And `permissive=0` says the denial was enforced, not logged-and-allowed. Two facts follow. The domain transition never happened, because `init` may not transition on executing a generically labelled file. And the fix is in two files, not one: `.te` grants the transition, `file_contexts` applies the label that makes the grant reachable.
+Read it left to right, because every denial you will ever meet has this shape. `scontext` is who acted: `init`, as itself. `tcontext` is what it acted on: the binary, labelled `vendor_file` — the default label for files on the vendor partition, because nothing has claimed this path yet. `tclass=file` with `{ execute }` is the act. And `permissive=0` says the denial was enforced, not logged-and-allowed.
+
+Two facts follow. The domain transition never happened, because `init` may not transition on executing a generically labelled file. And the fix is in two files, not one: `.te` grants the transition, `file_contexts` applies the label that makes the grant reachable.
 
 Create `device/acme/kestrel/sepolicy/vendor/file_contexts`:
 
@@ -210,7 +235,9 @@ allow system_server hal_welcome_service:service_manager find;
 binder_call(system_server, welcomed)
 ```
 
-`add_service` is another macro worth one reading: it grants your domain `service_manager { add find }` *on your service type only*, and plants a neverallow so no other domain can add under your label. Notice what is not in these four lines: any permission for apps. No app domain can find this service, so no app can call the daemon directly. The system service in `system_server` is the gatekeeper, and it will enforce Android permissions on its own callers (Lecture 5's job, Lecture 9's assumption). That is the design sentence reviewers want to hear, and it is written in policy, not in a slide.
+`add_service` is another macro worth one reading: it grants your domain `service_manager { add find }` *on your service type only*, and plants a neverallow so no other domain can add under your label. Notice what is not in these four lines: any permission for apps. No app domain can find this service, so no app can call the daemon directly.
+
+The system service in `system_server` is the gatekeeper, and it will enforce Android permissions on its own callers (Lecture 5's job, Lecture 9's assumption). That is the design sentence reviewers want to hear, and it is written in policy, not in a slide.
 
 Rebuild and retest. Registration now succeeds (`service list | grep welcome` shows the interface name), but call the daemon from the system side and the second half of the stage was waiting for you:
 
@@ -401,7 +428,10 @@ genfscon sysfs /devices/platform/welcome-light/leds/welcome u:object_r:sysfs_wel
 
 And in `device/acme/kestrel/BoardConfig.mk`, the line that puts all of it in the build: `BOARD_VENDOR_SEPOLICY_DIRS += device/acme/kestrel/sepolicy/vendor`. Check the build actually consumed your files before blaming policy for anything, by reading the intermediate the README points at: `out/target/product/<device>/obj/ETC/vendor_sepolicy.conf_intermediates/vendor_sepolicy.conf` should contain `type welcomed, domain;`. Grep for your own domain there first; it separates "my file was not built" from "my rule is wrong", and those two bugs waste equal time.
 
+<div class="section-recap"><span class="block-label">Now you can</span><p>Secure a daemon denial by denial — reading each kernel refusal and answering it with exactly one deliberate rule.</p></div>
+
 ## Micro-examples: the rest of the directory
+<div class="section-opener"><span class="block-label">In this section</span><p>The neighbours that complete the picture: the shorter policy artifacts a real program meets after the daemon itself is secured, each a whole artifact anchored where it is met.</p></div>
 
 The worked example secured a daemon. Three neighbours complete the picture. Each is a whole artifact, shorter than the main example, anchored where a real program meets it.
 
@@ -432,7 +462,9 @@ And its partner, `device/acme/kestrel/sepolicy/vendor/keys.conf`:
 ALL : $ACME_CERTIFICATES/acme_platform.x509.pem
 ```
 
-The format is upstream's, not invented: `system/sepolicy/private/mac_permissions.xml` maps `@PLATFORM` to `seinfo=platform` the same way, and `private/keys.conf` resolves `[@PLATFORM]` to `$DEFAULT_SYSTEM_DEV_CERTIFICATE/platform.x509.pem` for all build variants. Your program substitutes its own key path; the lecture uses the `$ACME_CERTIFICATES` placeholder because printing a real program's platform certificate in a course would be a security incident, and printing a fake hex string would teach you to expect one. Which key signs what is a program decision with real ceremony around it — that ceremony, and the `certificate:` field in the app's `Android.bp`, belong to Lecture 8's rollout treatment of signing. Here, only the SELinux half is in scope: a signer maps to a seinfo.
+The format is upstream's, not invented: `system/sepolicy/private/mac_permissions.xml` maps `@PLATFORM` to `seinfo=platform` the same way, and `private/keys.conf` resolves `[@PLATFORM]` to `$DEFAULT_SYSTEM_DEV_CERTIFICATE/platform.x509.pem` for all build variants. Your program substitutes its own key path; the lecture uses the `$ACME_CERTIFICATES` placeholder because printing a real program's platform certificate in a course would be a security incident, and printing a fake hex string would teach you to expect one.
+
+Which key signs what is a program decision with real ceremony around it — that ceremony, and the `certificate:` field in the app's `Android.bp`, belong to Lecture 8's rollout treatment of signing. Here, only the SELinux half is in scope: a signer maps to a seinfo.
 
 Then the seinfo is spent, in `device/acme/kestrel/sepolicy/vendor/seapp_contexts`:
 
@@ -440,7 +472,9 @@ Then the seinfo is spent, in `device/acme/kestrel/sepolicy/vendor/seapp_contexts
 user=system seinfo=acme_welcome isPrivApp=true name=com.acme.welcome domain=system_app type=system_app_data_file levelFrom=all
 ```
 
-Read it as a sentence: a `system`-user, privileged app, signed so that its seinfo is `acme_welcome`, with this package name, runs in the existing `system_app` domain and gets `system_app_data_file` for its data. The shape follows upstream's own lines (compare `user=system seinfo=platform isPrivApp=true name=com.android.DeviceAsWebcam …` in `private/seapp_contexts`). Note the deliberate reuse: we did not mint an app domain, because the app needs no powers `system_app` lacks. Mint one the day it does, with the same three-stage method as the daemon. Failure modes, one per file: `keys.conf` tag unresolved, the build's `insertkeys` step fails loudly; signer present but no matching `seapp_contexts` line, the app silently falls through to a later, more generic entry; `seapp_contexts` written but the app signed with a different key, `seinfo` never equals `acme_welcome` and the line is decoration. When an app "ignores its policy", check the chain in that order: key, seinfo, selector.
+Read it as a sentence: a `system`-user, privileged app, signed so that its seinfo is `acme_welcome`, with this package name, runs in the existing `system_app` domain and gets `system_app_data_file` for its data. The shape follows upstream's own lines (compare `user=system seinfo=platform isPrivApp=true name=com.android.DeviceAsWebcam …` in `private/seapp_contexts`). Note the deliberate reuse: we did not mint an app domain, because the app needs no powers `system_app` lacks.
+
+Mint one the day it does, with the same three-stage method as the daemon. Failure modes, one per file: `keys.conf` tag unresolved, the build's `insertkeys` step fails loudly; signer present but no matching `seapp_contexts` line, the app silently falls through to a later, more generic entry; `seapp_contexts` written but the app signed with a different key, `seinfo` never equals `acme_welcome` and the line is decoration. When an app "ignores its policy", check the chain in that order: key, seinfo, selector.
 
 ### The legacy neighbour: hwservice_contexts
 
@@ -450,7 +484,9 @@ Open `system/sepolicy/private/hwservice_contexts` at the pinned tag. It is 87 li
 android.hardware.automotive.vehicle::IVehicle    u:object_r:hal_vehicle_hwservice:s0
 ```
 
-The `::` spelling and the `_hwservice` type mark the HIDL world: services registered with `hwservicemanager`, granted with `add_hwservice`, found through `hwservice_manager`. The AIDL `IVehicle/default` line from Stage 2 is the same service in the current world. You will read this file on any program with legacy HALs, and you will write in it only when you ship a HIDL HAL — in which case the pair to write is an `hwservice_contexts` line here and `add_hwservice(your_domain, your_hwservice_type)` in your `.te`, mirroring `add_service`. New interfaces, including `welcomed`'s, must not be added here; a vendor AIDL service in `hwservice_contexts` is a category error that fails as the wonderfully unhelpful "service not found". One more file in the same family deserves a sentence so it never surprises you: `vndservice_contexts` serves `vndservicemanager` for vendor-to-vendor services. Upstream's copy contains a `manager` entry and a `*` default and nothing else. It is the right home for a service only vendor processes call, and the wrong home for `welcomed`, whose client lives in `system_server`.
+The `::` spelling and the `_hwservice` type mark the HIDL world: services registered with `hwservicemanager`, granted with `add_hwservice`, found through `hwservice_manager`. The AIDL `IVehicle/default` line from Stage 2 is the same service in the current world. You will read this file on any program with legacy HALs, and you will write in it only when you ship a HIDL HAL — in which case the pair to write is an `hwservice_contexts` line here and `add_hwservice(your_domain, your_hwservice_type)` in your `.te`, mirroring `add_service`.
+
+New interfaces, including `welcomed`'s, must not be added here; a vendor AIDL service in `hwservice_contexts` is a category error that fails as the wonderfully unhelpful "service not found". One more file in the same family deserves a sentence so it never surprises you: `vndservice_contexts` serves `vndservicemanager` for vendor-to-vendor services. Upstream's copy contains a `manager` entry and a `*` default and nothing else. It is the right home for a service only vendor processes call, and the wrong home for `welcomed`, whose client lives in `system_server`.
 
 ### A namespace of its own: keystore2_key_contexts
 
@@ -462,9 +498,16 @@ Suppose `welcomed` must persist one secret — say the credential it uses to aut
 200    u:object_r:welcomed_key:s0
 ```
 
-Format and id etiquette are upstream's: the platform file assigns `0`, `1`, and `100`–`120` to `su`, `shell`, `vold`, `wifi`, and friends, each type declared in `private/keystore_keys.te`. We take `200` because it is free at the pinned tag; on your tree, grep the platform file and take the next free block for your vendor, because two owners for one namespace id means two domains' keys in one labelled bucket. Scope note, stated plainly: this file gives `welcomed` its labelled namespace. The Binder path to `keystore2` (calling the keystore service, holding the right grants) is a further set of allows you can read in upstream's `keystore.te` when you implement it; a namespace without that path is a labelled drawer in a room you cannot enter, and the lecture leaves entering the room to the feature that needs it.
+Format and id etiquette are upstream's: the platform file assigns `0`, `1`, and `100`–`120` to `su`, `shell`, `vold`, `wifi`, and friends, each type declared in `private/keystore_keys.te`. We take `200` because it is free at the pinned tag; on your tree, grep the platform file and take the next free block for your vendor, because two owners for one namespace id means two domains' keys in one labelled bucket.
+
+Scope note, stated plainly: this file gives `welcomed` its labelled namespace. The Binder path to `keystore2` (calling the keystore service, holding the right grants) is a further set of allows you can read in upstream's `keystore.te` when you implement it; a namespace without that path is a labelled drawer in a room you cannot enter, and the lecture leaves entering the room to the feature that needs it.
+
+<div class="section-recap"><span class="block-label">Now you can</span><p>Write the neighbouring policy files — contexts and their kin — as deliberately as the daemon's rules.</p></div>
+
+<figure class="anchor-figure" role="img" aria-label="Concept anchor: the denial loop"><p class="anchor-title">Concept anchor — the denial loop</p><div class="anchor-flow"><div class="anchor-node"><strong>Run enforcing</strong><code>setenforce 1</code> — no exceptions</div><span class="anchor-arrow" aria-hidden="true"></span><div class="anchor-node"><strong>Read the denial</strong>the kernel names domain, type, and the refused permission</div><span class="anchor-arrow" aria-hidden="true"></span><div class="anchor-node"><strong>Write one rule</strong>exactly what the denial demands, no wider</div><span class="anchor-arrow" aria-hidden="true"></span><div class="anchor-node"><strong>Rebuild policy</strong>the directory, re-enrolled</div><span class="anchor-arrow" aria-hidden="true"></span><div class="anchor-node"><strong>Run again</strong>the next denial, or silence</div></div><figcaption><strong>Read it as:</strong> each turn answers one refusal with one rule. A loop that changes three things per turn teaches you nothing except that something worked.</figcaption></figure>
 
 ## The build and test loop
+<div class="section-opener"><span class="block-label">In this section</span><p>Everything above reduces to a loop you will run hundreds of times, so we make it boring: build the policy, run enforcing, read the denial, change one thing.</p></div>
 
 Everything above reduces to a loop you will run hundreds of times, so make it boring:
 
@@ -486,13 +529,20 @@ adb logcat -b all -d | grep "avc: denied" | grep welcomed
 
 Step 5's order is a diagnostic, not a ritual. Mode first, because a permissive boot makes every later observation worthless. Process label second, because a daemon in the wrong domain invalidates every file check. Object labels third, because most denials are labels wearing a permission costume. Only then the denial log, which you now read against known-good labels. When the log is empty for your domain, capture the whole sequence's output into the change description, as Stage 3 said.
 
-Two review habits to take into every policy diff, yours or a supplier's. Read for *breadth*: any allow naming a type you did not mint (`device`, `default_prop`, `vendor_data_file` and their friends) needs a sentence explaining why a dedicated type was impossible, and "the denial stopped" is not that sentence. And read for *audience*: every `find`, `binder_call`, and property `set` names who gains power; a diff that adds a client is a design change and should be reviewed like one. `set_prop` in particular is shell-level power in a car — treat a new property grant the way you would treat a new root shell.
+Two review habits to take into every policy diff, yours or a supplier's. Read for *breadth*: any allow naming a type you did not mint (`device`, `default_prop`, `vendor_data_file` and their friends) needs a sentence explaining why a dedicated type was impossible, and "the denial stopped" is not that sentence. And read for *audience*: every `find`, `binder_call`, and property `set` names who gains power;
 
-Where the rest of platform security went, briefly, so the old lecture's topics are accounted for. Privileged-permission allowlists (the XML that lets a priv-app hold signature permissions) are created alongside the privileged component itself, so they are taught in Lecture 8's rollout, next to the overlay and product files they ship with. Signing keys and `Android.bp` certificates likewise belong with the component and with Lecture 11's release signing, and Android Verified Boot (`BOARD_AVB_ENABLE`, vbmeta, rollback indexes) is board configuration that Lecture 11 teaches beside the OTA machinery that depends on it. This lecture's `mac_permissions.xml` is the one signing-adjacent file that stays, because `seinfo` is SELinux input, not release process.
+a diff that adds a client is a design change and should be reviewed like one. `set_prop` in particular is shell-level power in a car — treat a new property grant the way you would treat a new root shell.
+
+Where the rest of platform security went, briefly, so the old lecture's topics are accounted for. Privileged-permission allowlists (the XML that lets a priv-app hold signature permissions) are created alongside the privileged component itself, so they are taught in Lecture 8's rollout, next to the overlay and product files they ship with.
+
+Signing keys and `Android.bp` certificates likewise belong with the component and with Lecture 11's release signing, and Android Verified Boot (`BOARD_AVB_ENABLE`, vbmeta, rollback indexes) is board configuration that Lecture 11 teaches beside the OTA machinery that depends on it. This lecture's `mac_permissions.xml` is the one signing-adjacent file that stays, because `seinfo` is SELinux input, not release process.
 
 *Verification status: every upstream path, macro, and format above was checked against `android-17.0.0_r1` (`system/sepolicy`, `device/google/cuttlefish`) and the official SELinux pages on source.android.com; the acme files are fictional and labelled as such. The enforcing Cuttlefish cycle (Tier 2) was not run in the authoring environment, per the course's verification rules — sample denials and outputs show the documented formats with representative values.*
 
+<div class="section-recap"><span class="block-label">Now you can</span><p>Run the policy loop without improvising: one change per iteration, one denial answered at a time.</p></div>
+
 ## Annex: the stand-in daemon
+<div class="section-opener"><span class="block-label">In this section</span><p>The smallest program that earns every denial in this lecture: it registers the AIDL service, writes its state, and touches every surface the policy must judge.</p></div>
 
 Create these under `device/acme/kestrel/welcomed/`. Together they are the smallest program that earns every denial in this lecture: it registers the AIDL service, writes its state file, sets its property, touches the light, and sleeps. It is a stand-in. Lectures 4 and 5 replace its startup and interface design properly; the SELinux policy does not change when they do.
 
@@ -593,7 +643,10 @@ on post-fs-data
 
 Two stand-in simplifications to notice, because noticing them is the transferable part. The generated library name (`vendor.acme.hardware.welcome-ndk`) follows the interface name for an *unstable* interface; a frozen, versioned one carries its version, which is Lecture 6's subject. And the daemon opens the LED through `/sys/class/leds/…`, the symlink user space sees, while policy labels the `/devices/platform/…` target — genfs labels filesystems, not symlinks, which is why the `genfs_contexts` line in Stage 3 is written the way it is.
 
+<div class="section-recap"><span class="block-label">Now you can</span><p>Build the stand-in daemon and name the denial each of its surfaces will earn before you run it.</p></div>
+
 ## Lab (guided)
+<div class="section-opener"><span class="block-label">In this section</span><p>Secure <code>welcomed</code> from an empty <code>sepolicy/vendor/</code> at both tiers: files provably consistent at Tier 1, a live enforcing run at Tier 2, the bench reading at Tier 3.</p></div>
 
 Same exercise at both tiers, per this course's definition: secure `welcomed` from an empty `sepolicy/vendor/` directory. Tier 1 stops at files that are provably consistent; Tier 2 proves them on a running, enforcing system.
 
@@ -620,7 +673,10 @@ Same exercise at both tiers, per this course's definition: secure `welcomed` fro
 
 <div class="checkpoint"><strong>Lab checkpoint:</strong> an enforcing boot, <code>welcomed</code> in its own domain, its service findable only by <code>system_server</code>, its files bearing types with its name in them, and a denial log that stays empty because you removed causes, not because you widened doors.</div>
 
+<div class="section-recap"><span class="block-label">Now you can</span><p>Take an empty policy directory to an enforcing pass, checkpoint by checkpoint, with a grep-provable board line.</p></div>
+
 ## Exercises
+<div class="section-opener"><span class="block-label">In this section</span><p>Exercises that change files, each with a complete answer: extend the policy, judge a proposed rule, and explain a denial to the teammate whose change caused it.</p></div>
 
 Do these in your Tier 1 directory. Each changes files; each has a complete answer.
 
@@ -640,8 +696,13 @@ Do these in your Tier 1 directory. Each changes files; each has a complete answe
 
 </details>
 
+<div class="section-recap"><span class="block-label">Now you can</span><p>Judge a proposed SELinux rule the way a reviewer must: necessary, sufficient, and no wider than the denial demands.</p></div>
+
 ## Go deeper: kernel and app pointers
+<div class="section-opener"><span class="block-label">In this section</span><p>SELinux is enforced by the kernel and configured from user space; the kernel path is the honest next rung when a denial turns out to be a driver, and the app path covers the permissions on the other side of the fence.</p></div>
 
 SELinux is enforced by the kernel and configured from user space, so the [kernel path]({{ '/kernel-path/' | relative_url }}) step 1 is the honest next rung when a denial turns out to be a driver labelling problem. On the app side, the seinfo chain you built meets Android permissions (protection levels, signature permissions) in the [app path]({{ '/app-path/' | relative_url }}) steps 1–2, and Lecture 12 treats this lecture's enforcing, zero-denial run as what it is: a test.
 
 <div class="callout"><p><strong>Working with AI agents:</strong> paste a denial to an agent and it will write you an <code>allow</code>. That is precisely the danger this lecture trained against. Use the agent as the Stage 3 opponent: have it explain the denial, have it find related policy in your tree, then make it argue <em>against</em> the rule you drafted — which existing type did you overlook, who else gains access, what breaks under a neverallow. Write the final line yourself. Policy you cannot defend in one sentence is not yours yet, no matter who typed it.</p></div>
+
+<div class="section-recap"><span class="block-label">Now you can</span><p>Tell a policy problem from a kernel problem inside a denial, and take the matching pointer.</p></div>

@@ -5,6 +5,8 @@ subtitle: What you need to know, what you need to own, and how to check both bef
 permalink: /setup/
 ---
 
+<div class="lecture-map"><span class="block-label">Setup map</span><h2>Setup on one screen</h2><div class="lecture-map-grid"><div><h3>Know</h3><ul><li><a href="#prerequisites-assumed-not-taught">Prerequisites</a> — assumed, not taught, with a self-check</li></ul></div><div><h3>Pin</h3><ul><li><a href="#the-pinned-baseline">The pinned baseline</a> — Android 17 / AAOS 26Q2, one tag for everything</li></ul></div><div><h3>Own &amp; verify</h3><ul><li><a href="#machines-by-tier">Machines, by tier</a> — laptop, workstation, bench</li><li><a href="#verify-your-setup">Verify your setup</a> — prove it before Lecture 1</li></ul></div></div></div>
+
 ## Prerequisites (assumed, not taught)
 
 - **Linux shell:** navigate, edit, grep a tree, read a man page. If `find`, `grep -r`, and shell pipes are new, spend a weekend with MIT's [shell lecture](https://missing.csail.mit.edu/) first. This course starts where that one ends.

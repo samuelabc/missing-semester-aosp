@@ -52,6 +52,22 @@ _Avoid_: Hands-on (unqualified), exercise (for this concept)
 The single fictional product that every lecture adds one real piece to, so the pieces accumulate into the Capstone instead of being discarded at the end of each lecture.
 _Avoid_: Toy example, demo (unqualified)
 
+**Section Opener**:
+The 1–2 sentences at the top of a lecture section that say what the section teaches and what the reader will do. It is the doorway into the section, not a summary of it.
+_Avoid_: Introduction (unqualified), preamble
+
+**Section Recap**:
+The closing note of a lecture section that states what the reader can now do. It ends with capability, not with a restatement of the section's contents.
+_Avoid_: Summary (for this concept), TL;DR
+
+**Concept Anchor**:
+A diagram placed only where an idea is itself a shape — a chain, a layer stack, a timeline, or a map — so the reader has a picture to hold while the text explains each part. Decoration that anchors no concept is not a Concept Anchor.
+_Avoid_: Illustration, figure (unqualified)
+
+**Contents Rail**:
+The persistent contents of a lecture — a left rail on desktop, a collapsible top bar on a phone — that shows every section and highlights where the reader currently is, with reading progress.
+_Avoid_: Sidebar, table of contents (for the persistent component)
+
 **Configuration Artifact**:
 A file whose contents configure a running system — policy, contexts, board makefiles and their kin. It is taught by its path, the process that reads it, the meaning of its lines, and the failure that appears when it is missing or wrong.
 _Avoid_: Config (unqualified)

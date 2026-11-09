@@ -50,3 +50,16 @@ Include `Completeness: X/10` for each option (10=all edge cases, 7=happy path, 3
 ## Repo Ownership — See Something, Say Something
 - You own everything. Investigate and offer to fix proactively.
 - Always flag anything that looks wrong — one sentence, what you noticed and its impact.
+
+## Learned User Preferences
+- Content should read as a hands-on course, not a blog overview; include concrete file-level steps (e.g. SELinux `.te` and sepolicy), not concepts alone.
+- Preserve the technical depth the owner values; when density hurts followability, improve layout and signposting rather than simplifying ideas.
+- Use `/grill-with-docs` (grilling + domain modeling) for substantive content and readability decisions before large rewrites.
+- When implementing an approved plan, do not edit the plan file; execute existing todos without recreating them.
+
+## Learned Workspace Facts
+- Jekyll course site **The Missing Semester of AOSP & AAOS** for OEM engineers customizing AOSP/AAOS for in-vehicle infotainment at the system level; visual model follows [MIT Missing Semester](https://missing.csail.mit.edu/).
+- Twelve lectures use a fixed skeleton: Motivation → Mental model → Worked example → Guided lab → Exercises → Go deeper; settled product decisions live in `ARCHITECTURE.md` and `docs/adr/`.
+- Running example across lectures: `device/acme/kestrel/` (`kestrel_auto`), vendor daemon `welcomed`; frozen names in `GLOSSARY.md`.
+- Readability standard (ADR-0004): warm editorial UI, sticky Contents Rail, section openers/recaps, narrative paragraphs ≤~90 words, guardrail **no decoration without direction**.
+- GitHub Pages: https://samuelabc.github.io/missing-semester-aosp/ — `_config.yml` `url`/`baseurl` require `relative_url` for internal links.

@@ -1,16 +1,28 @@
 ---
 layout: default
 ---
-<article class="lecture">
-  <p class="lecture-meta">Lecture {{ page.number }} · {{ page.reading_time | default: "~20 min read, plus exercises" }} · Lab: {{ page.lab_time | default: "1–3 h" }} · Baseline: Android 17 / AAOS 26Q2</p>
-  <h1>{{ page.title }}</h1>
-  {% if page.subtitle %}<p class="subtitle">{{ page.subtitle }}</p>{% endif %}
-  {{ content }}
-  <nav class="lecture-nav" aria-label="Lecture navigation">
-    {% assign sorted = site.lectures | sort: "number" %}
-    {% assign prev_num = page.number | minus: 1 %}
-    {% assign next_num = page.number | plus: 1 %}
-    <span>{% for lec in sorted %}{% if lec.number == prev_num %}← <a href="{{ lec.url | relative_url }}">{{ lec.title }}</a>{% endif %}{% endfor %}</span>
-    <span>{% assign has_next = false %}{% for lec in sorted %}{% if lec.number == next_num %}{% assign has_next = true %}<a href="{{ lec.url | relative_url }}">{{ lec.title }}</a> →{% endif %}{% endfor %}{% unless has_next %} <a href="{{ '/capstone/' | relative_url }}">Capstone</a> →{% endunless %}</span>
-  </nav>
-</article>
+<div class="lecture-shell">
+  <aside class="contents-rail" id="contents-rail" aria-label="Lecture contents">
+    <button class="rail-toggle" id="rail-toggle" type="button" aria-expanded="false" aria-controls="lecture-toc">
+      <span id="rail-current">Contents</span><span class="rail-toggle-state" id="rail-toggle-state">Show</span>
+    </button>
+    <p class="rail-heading" id="rail-heading">Contents</p>
+    <nav id="lecture-toc" aria-labelledby="rail-heading"></nav>
+    <div class="rail-progress" aria-hidden="true"><span id="rail-progress-bar"></span></div>
+    <a class="rail-back" href="{{ '/' | relative_url }}">← All lectures</a>
+  </aside>
+  <article class="lecture" id="lecture-article">
+    <p class="lecture-meta">Lecture {{ page.number }} · {{ page.reading_time | default: "~20 min read, plus exercises" }} · Lab: {{ page.lab_time | default: "1–3 h" }} · Baseline: Android 17 / AAOS 26Q2</p>
+    <h1>{{ page.title }}</h1>
+    {% if page.subtitle %}<p class="subtitle">{{ page.subtitle }}</p>{% endif %}
+    {{ content }}
+    <nav class="lecture-nav" aria-label="Lecture navigation">
+      {% assign sorted = site.lectures | sort: "number" %}
+      {% assign prev_num = page.number | minus: 1 %}
+      {% assign next_num = page.number | plus: 1 %}
+      <span>{% for lec in sorted %}{% if lec.number == prev_num %}← <a href="{{ lec.url | relative_url }}">{{ lec.title }}</a>{% endif %}{% endfor %}</span>
+      <span>{% assign has_next = false %}{% for lec in sorted %}{% if lec.number == next_num %}{% assign has_next = true %}<a href="{{ lec.url | relative_url }}">{{ lec.title }}</a> →{% endif %}{% endfor %}{% unless has_next %} <a href="{{ '/capstone/' | relative_url }}">Capstone</a> →{% endunless %}</span>
+    </nav>
+  </article>
+</div>
+<script src="{{ '/assets/js/reading.js' | relative_url }}" defer></script>

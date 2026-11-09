@@ -5,6 +5,8 @@ subtitle: "Assemble the welcome-light stack from the twelve lectures' artifacts 
 permalink: /capstone/
 ---
 
+<div class="lecture-map"><span class="block-label">Capstone map</span><h2>The capstone on one screen</h2><div class="lecture-map-grid"><div><h3>Assemble</h3><ul><li><a href="#the-brief">The brief</a> — one feature, no scaffolding</li><li><a href="#what-done-assembles-the-artifact-map">The artifact map</a> — twenty rows, checked by path</li></ul></div><div><h3>Deliver</h3><ul><li><a href="#deliverables">Deliverables</a> — seven, each with acceptance evidence</li><li><a href="#suggested-order-of-battle">Order of battle</a> — the build order that works</li></ul></div><div><h3>Prove</h3><ul><li><a href="#submission-shape">Submission shape</a> — patch set plus report</li><li><a href="#stretch-goals-optional">Stretch goals</a> — optional, after done is done</li></ul></div></div></div>
+
 ## The brief
 
 Across the twelve lectures you built one feature in pieces: a **cabin welcome light**. When the driver door opens, an ambient light shows a welcome state; when the door closes, it goes dark. Each lecture produced its layer as an exercise — a product that builds, a daemon that boots, a frozen contract, a vehicle property, a gatekeeper service, an app, a policy, a debug session, an update, a test suite. The capstone removes the scaffolding: **assemble those artifacts into one coherent patch set against `device/acme/kestrel`, add one variation of your own, and prove the whole stack end to end.**
